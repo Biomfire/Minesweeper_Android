@@ -22,6 +22,7 @@ import com.example.minefield.controller.FieldController;
 
 
 public class MinefieldView extends View {
+    private static final String TAG = MinefieldView.class.getName();
     FieldController field;
     private float fieldCenterPointX = 0;
     private float fieldCenterPointY = 0;
@@ -123,8 +124,6 @@ public class MinefieldView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.save();
-        //canvas.translate(getWidth() / 2.0f - fieldCenterPointX, getHeight() / 2.0f - fieldCenterPointY);
-       // canvas.scale(scale, scale, scaleX, scaleY);
         canvas.concat(drawMatrix);
         for (int i = 0; i < mineFieldSizeX; ++i) {
             for (int j = 0; j < mineFieldSizeY; ++j) {
@@ -208,16 +207,21 @@ public class MinefieldView extends View {
 
     public Pair<Integer, Integer> getFieldIndexFromViewCoordinates(float tX, float tY) {
         float[] points = {tX, tY};
-        float transformationX = getWidth() / 2.0f - fieldCenterPointX;
-        float transformationY = getHeight() / 2.0f - fieldCenterPointY;
-        float worldCoordinatesX = tX / scale - transformationX / scale;
-        float worldCoordinatesY = tY / scale - transformationY / scale;
+        Log.d(TAG, String.format("getFieldIndexFromViewCoordinates: Input Coordinates: %f, %f", tX, tY));
+        Matrix inverse = new Matrix();
+        drawMatrix.invert(inverse);
+        inverse.mapPoints(points);
+        Log.d(TAG, String.format("getFieldIndexFromViewCoordinates: World Coordinates: %f, %f", points[0], points[1]));
+        float worldCoordinatesX = points[0];
+        float worldCoordinatesY = points[1];
         if (worldCoordinatesX >= 0 && worldCoordinatesX <= fieldSizeX * mineFieldSizeX && worldCoordinatesY >= 0 && worldCoordinatesY <= fieldSizeY * mineFieldSizeY) {
             int x = (int) worldCoordinatesX / fieldSizeX;
             int y = (int) worldCoordinatesY / fieldSizeY;
+            Log.d(TAG, String.format("getFieldIndexFromViewCoordinates: Clicked Field Index: %d, %d", x, y));
             return new Pair<>(x, y);
         }
         else{
+            Log.d(TAG, "getFieldIndexFromViewCoordinates: Coordinate out of bounds");
             return null;
         }
     }

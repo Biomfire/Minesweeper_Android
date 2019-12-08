@@ -24,7 +24,9 @@ public class Empty extends FieldElement {
     void uncoverEmpty() {
         if(!isUncovered() && !isFlagged) {
             setUncovered(true);
-            field.uncoverNearbyEmpty(coordinate);
+            if(nearbyMines == 0) {
+                field.uncoverNearbyEmpty(coordinate);
+            }
         }
     }
 }

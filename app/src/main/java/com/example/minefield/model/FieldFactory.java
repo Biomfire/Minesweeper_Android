@@ -9,7 +9,7 @@ import static java.lang.Math.min;
 public class FieldFactory {
     private int sizeX = 1;
     private int sizeY = 1;
-    private int mineCount = 2;
+    private int mineCount = 5;
 
     public Field create() {
         FieldElement[][] fields = new FieldElement[sizeX][sizeY];
