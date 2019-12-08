@@ -1,15 +1,19 @@
 package com.example.minefield.model;
 
 import static java.lang.Math.floor;
+import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
 public class Field {
     private FieldElement[][] fields;
 
     private boolean hasMineExploded;
+    private int minecount;
 
-    public Field(FieldElement[][] inputfields) {
+    public Field(FieldElement[][] inputfields, int minecount) {
         this.fields = inputfields;
+        this.minecount = minecount;
+
     }
 
     public void explodeMine() {
@@ -47,5 +51,32 @@ public class Field {
 
     public boolean hasMineExploded() {
         return hasMineExploded;
+    }
+
+    public void uncoverField(Coordinate coordinate) {
+        fields[coordinate.getX()][coordinate.getY()].onUncover();
+    }
+
+    public boolean hasEnded() {
+        for(int i = 0; i< this.getFieldsX(); ++i){
+            for(int j = 0; j < this.getFieldsY(); ++j){
+                if(!fields[i][j].isUncovered() && !fields[i][j].isFlagged()){
+                    return hasMineExploded;
+                }
+            }
+        }
+        int flaggedcnt = 0;
+        for(int i = 0; i< this.getFieldsX(); ++i){
+            for(int j = 0; j < this.getFieldsY(); ++j){
+                if(fields[i][j].isFlagged()){
+                    ++flaggedcnt;
+                }
+            }
+        }
+        return flaggedcnt == minecount;
+    }
+
+    public void flagField(Coordinate coordinate) {
+        fields[coordinate.getX()][coordinate.getY()].toggleFlag();
     }
 }

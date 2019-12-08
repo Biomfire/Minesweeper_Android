@@ -1,6 +1,10 @@
 package com.example.minefield.model;
 
 public class Empty extends FieldElement {
+    public int getNearbyMines() {
+        return nearbyMines;
+    }
+
     private int nearbyMines;
 
     public Empty(Coordinate coordinate, int nearbyMines) {
@@ -18,7 +22,7 @@ public class Empty extends FieldElement {
 
     @Override
     void uncoverEmpty() {
-        if(nearbyMines == 0) {
+        if(!isUncovered() && !isFlagged) {
             setUncovered(true);
             field.uncoverNearbyEmpty(coordinate);
         }
