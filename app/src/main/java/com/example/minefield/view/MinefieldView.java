@@ -31,8 +31,8 @@ public class MinefieldView extends View {
     Bitmap flag;
     Bitmap covered;
     Bitmap[] numbers;
-    int mineFieldSizeX = 5;
-    int mineFieldSizeY = 8;
+    int mineFieldSizeX;
+    int mineFieldSizeY;
     int fieldSizeX;
     int fieldSizeY;
     float scale = 0.25f;
@@ -114,8 +114,6 @@ public class MinefieldView extends View {
         numbers[8] = BitmapFactory.decodeResource(getResources(), R.drawable.number_8);
         fieldSizeX = covered.getWidth();
         fieldSizeY = covered.getHeight();
-        fieldCenterPointX = fieldSizeX * mineFieldSizeX * scale / 2;
-        fieldCenterPointY = fieldSizeY * mineFieldSizeY * scale / 2;
         scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         gestureDetector = new GestureDetector(context, new GestureListener());
     }
@@ -135,6 +133,11 @@ public class MinefieldView extends View {
 
     public void setField(FieldController field) {
         this.field = field;
+        this.mineFieldSizeX = field.getFieldSizeX();
+        this.mineFieldSizeY = field.getFieldSizeY();
+        fieldCenterPointX = fieldSizeX * mineFieldSizeX / 2;
+        fieldCenterPointY = fieldSizeY * mineFieldSizeY / 2;
+        drawMatrix.postTranslate(-fieldCenterPointX, -fieldCenterPointY);
     }
 
     void drawField(int x, int y, Canvas canvas) {

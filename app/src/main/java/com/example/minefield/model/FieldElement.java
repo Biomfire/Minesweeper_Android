@@ -1,5 +1,9 @@
 package com.example.minefield.model;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+
 abstract public class FieldElement {
     protected Coordinate coordinate;
     protected Field field;
@@ -9,7 +13,8 @@ abstract public class FieldElement {
     }
 
     protected boolean isFlagged = false;
-    private boolean isUncovered = false;
+    protected boolean isUncovered = false;
+
     abstract void onUncover();
 
     public void setField(Field field) {
@@ -21,9 +26,10 @@ abstract public class FieldElement {
     }
 
     abstract void uncoverEmpty();
-    void toggleFlag(){
-        if(!isUncovered)
-        isFlagged = !isFlagged;
+
+    void toggleFlag() {
+        if (!isUncovered)
+            isFlagged = !isFlagged;
     }
 
     public boolean isUncovered() {
@@ -32,5 +38,10 @@ abstract public class FieldElement {
 
     public void setUncovered(boolean uncovered) {
         isUncovered = uncovered;
+    }
+
+    public void save(OutputStream output) throws IOException {
+        output.write(Integer.toString(isUncovered() ? 1 : 0).getBytes(Charset.forName("UTF-8")));
+        output.write(Integer.toString(isFlagged() ? 1 : 0).getBytes(Charset.forName("UTF-8")));
     }
 }

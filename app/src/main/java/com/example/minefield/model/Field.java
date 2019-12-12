@@ -1,6 +1,9 @@
 package com.example.minefield.model;
 
-import static java.lang.Math.floor;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+
 import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
@@ -8,11 +11,16 @@ public class Field {
     private FieldElement[][] fields;
 
     private boolean hasMineExploded;
-    private int minecount;
+    private int minecount = 0;
 
     public Field(FieldElement[][] inputfields, int minecount) {
         this.fields = inputfields;
         this.minecount = minecount;
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                this.getFieldElement(new Coordinate(i, j)).setField(this);
+            }
+        }
 
     }
 
@@ -78,5 +86,14 @@ public class Field {
 
     public void flagField(Coordinate coordinate) {
         fields[coordinate.getX()][coordinate.getY()].toggleFlag();
+    }
+
+    public void save(OutputStream output) throws IOException {
+        for(int i = 0; i < fields.length; i++){
+            for(int j = 0; j < fields[0].length; j++){
+                fields[i][j].save(output);
+            }
+            output.write("\n".getBytes(Charset.forName("UTF-8")));
+        }
     }
 }

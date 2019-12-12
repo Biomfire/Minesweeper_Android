@@ -7,7 +7,35 @@ import com.example.minefield.model.FieldElement;
 import com.example.minefield.model.FieldFactory;
 import com.example.minefield.model.Mine;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class FieldController {
+    public FieldController(int xSize, int ySize, int mineNumber) {
+        FieldFactory factory = new FieldFactory();
+        factory.setSizeX(xSize);
+        factory.setSizeY(ySize);
+        factory.setMineCount(mineNumber);
+        field = factory.create();
+    }
+
+    public int getFieldSizeX() {
+        return field.getFieldsX();
+    }
+
+    public int getFieldSizeY() {
+        return field.getFieldsY();
+    }
+
+    public void save(OutputStream output) {
+        try {
+            field.save(output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public enum FieldDrawType {
         MINE,
         FLAGGED,
@@ -48,17 +76,10 @@ public class FieldController {
         }
 
     }
-    Field field;
+    private Field field;
 
-    public FieldController(boolean loadField) {
-        FieldFactory factory = new FieldFactory();
-        factory.setSizeX(5);
-        factory.setSizeY(8);
-        if (loadField) {
-            field = factory.load();
-        } else {
-            field = factory.create();
-        }
+    public FieldController(InputStream input) {
+        field = new FieldFactory().load(input);
     }
 
     public FieldDrawType getField(int x, int y) {

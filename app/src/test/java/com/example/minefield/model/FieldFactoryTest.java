@@ -24,7 +24,7 @@ public class FieldFactoryTest {
     @Test
     public void testFactoryOneMine() {
         FieldFactory factory = new FieldFactory();
-        factory.setMineCount(1);
+        factory.setSizeX(1).setSizeY(1).setMineCount(1);
         Field field = factory.create();
         assertTrue(field.getFieldElement(new Coordinate(0, 0)) instanceof Mine);
     }

@@ -1,7 +1,11 @@
 package com.example.minefield.model;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -14,15 +18,15 @@ public class FieldTest {
         FieldElement[][] fields = new FieldElement[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                fields[i][j] = mock(Empty.class);
+                fields[i][j] = mock(FieldElement.class);
             }
         }
-        field = new Field(fields);
+        field = new Field(fields,0 );
     }
 
     @Test
     public void testBlowUp() {
-        Field field = new FieldFactory().create();
+        Field field = new FieldFactory().setSizeX(10).create();
         field.explodeMine();
         assertTrue(field.hasMineExploded());
     }
@@ -150,6 +154,23 @@ public class FieldTest {
         verify(field.getFieldElement(new Coordinate(2, 2)), times(0)).uncoverEmpty();
         verify(field.getFieldElement(new Coordinate(0, 2)), times(0)).uncoverEmpty();
         verify(field.getFieldElement(new Coordinate(2, 0)), times(0)).uncoverEmpty();
+    }
+
+    @Test
+    public void testSave() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        field.save(baos);
+        verify(field.getFieldElement(new Coordinate(0, 0)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(0, 1)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(1, 0)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(1, 1)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(2, 1)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(1, 2)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(2, 2)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(0, 2)), times(1)).save(baos);
+        verify(field.getFieldElement(new Coordinate(2, 0)), times(1)).save(baos);
+        byte[] byteArray = baos.toByteArray();
+        Assert.assertEquals("\n\n\n", new String(byteArray));
     }
 
 }

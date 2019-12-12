@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/xSizeLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/xSizeTextView"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/xSize" />
+
+            <SeekBar
+                android:id="@+id/xSizeSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ySizeLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/xSizeLinearLayout">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ySize" />
+
+            <SeekBar
+                android:id="@+id/ySizeSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mineCountLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ySizeLinearLayout">
+
+            <TextView
+                android:id="@+id/mineCountTextView"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mineCount" />
+
+            <SeekBar
+                android:id="@+id/mineNumberSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="20" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submitNewGameButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:onClick="onNewGamePopUpClick"
+            android:text="@string/start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mineCountLinearLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
