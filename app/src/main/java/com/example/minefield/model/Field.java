@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 
 import static java.lang.Math.min;
 import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class Field {
     private FieldElement[][] fields;
@@ -95,5 +96,8 @@ public class Field {
             }
             output.write("\n".getBytes(Charset.forName("UTF-8")));
         }
+    }
+    public double getPoints(){
+        return hasMineExploded? 0 : minecount*sqrt(fields.length)*sqrt(fields[0].length);
     }
 }

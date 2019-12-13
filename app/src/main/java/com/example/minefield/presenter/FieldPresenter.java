@@ -1,4 +1,4 @@
-package com.example.minefield.controller;
+package com.example.minefield.presenter;
 
 import com.example.minefield.model.Coordinate;
 import com.example.minefield.model.Empty;
@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FieldController {
-    public FieldController(int xSize, int ySize, int mineNumber) {
+public class FieldPresenter {
+    public FieldPresenter(int xSize, int ySize, int mineNumber) {
         FieldFactory factory = new FieldFactory();
         factory.setSizeX(xSize);
         factory.setSizeY(ySize);
@@ -34,6 +34,10 @@ public class FieldController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Double getPoints() {
+        return field.getPoints();
     }
 
     public enum FieldDrawType {
@@ -78,7 +82,7 @@ public class FieldController {
     }
     private Field field;
 
-    public FieldController(InputStream input) {
+    public FieldPresenter(InputStream input) {
         field = new FieldFactory().load(input);
     }
 

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,12 +19,13 @@ public class FieldFactory {
     private int mineCount = 5;
 
     public Field create() {
-        assert(sizeX*sizeY>=mineCount);
+        if (sizeX * sizeY < mineCount) {
+            throw new InvalidParameterException("Tried to create a field with these parameters:" + sizeX + " " + sizeY + " " + mineCount);
+        }
         FieldElement[][] fields = new FieldElement[sizeX][sizeY];
         ArrayList<Coordinate> minePositions = FillFieldWithMines(fields);
         fillFieldWithEmpty(fields, minePositions);
-        Field field = new Field(fields, mineCount);
-        return field;
+        return new Field(fields, mineCount);
     }
 
     private ArrayList<Coordinate> FillFieldWithMines(FieldElement[][] fields) {
@@ -85,24 +87,23 @@ public class FieldFactory {
     }
 
     static public Field load(InputStream input) {
-        ArrayList<ArrayList<FieldElement>> fieldList = new ArrayList<> ();
+        ArrayList<ArrayList<FieldElement>> fieldList = new ArrayList<>();
         int mineCount = 0;
         try {
             BufferedReader r = new BufferedReader(new InputStreamReader(input, "UTF-8"));
             String line;
             int i = 0;
-            while((line = r.readLine()) != null){
+            while ((line = r.readLine()) != null) {
                 fieldList.add(new ArrayList<FieldElement>());
-                for(int k = 0; k < line.length(); k+=3){
+                for (int k = 0; k < line.length(); k += 3) {
                     boolean isUncovered = line.charAt(k + 1) == '1';
                     boolean isFlagged = line.charAt(k + 2) == '1';
-                    if(line.charAt(k) == 'M'){
-                        fieldList.get(i).add(Mine.load(new Coordinate(i, k/3), isUncovered, isFlagged));
+                    if (line.charAt(k) == 'M') {
+                        fieldList.get(i).add(Mine.load(new Coordinate(i, k / 3), isUncovered, isFlagged));
                         mineCount++;
-                    }
-                    else{
+                    } else {
                         int numberOfNearbyMines = Character.getNumericValue(line.charAt(k));
-                        fieldList.get(i).add(Empty.load(new Coordinate(i, k/3), numberOfNearbyMines, isUncovered, isFlagged));
+                        fieldList.get(i).add(Empty.load(new Coordinate(i, k / 3), numberOfNearbyMines, isUncovered, isFlagged));
                     }
                 }
                 i++;

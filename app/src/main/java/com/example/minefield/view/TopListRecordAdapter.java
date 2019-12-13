@@ -10,42 +10,38 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.minefield.R;
-import com.example.minefield.model.TopListRecord;
+import com.example.minefield.database.TopListRecord;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TopListRecordAdapter extends RecyclerView.Adapter<TopListRecordAdapter.ViewHolder> {
-    ArrayList<TopListRecord> toplist;
+    private final List<TopListRecord> toplist;
 
-    public TopListRecordAdapter(ArrayList<TopListRecord> toplist) {
-        this.toplist = toplist;
+    public TopListRecordAdapter() {
+        this.toplist = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.records_row_layout, parent, false);
-
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        View topListView = LayoutInflater.from(parent.getContext()).inflate(R.layout.records_row_layout, parent, false);
+        return new ViewHolder(topListView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TopListRecord topListRecord = toplist.get(position);
         TextView time = holder.time;
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
-        String timeString = dateFormat.format(topListRecord.getTimeOfAchievment());
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd\tHH:mm");
+        String timeString = dateFormat.format(topListRecord.time);
         time.setText(timeString);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         TextView points = holder.points;
-        points.setText(Integer.toString(topListRecord.getPoints()));
+        points.setText(decimalFormat.format(topListRecord.Points));
     }
 
     @Override
@@ -62,12 +58,19 @@ public class TopListRecordAdapter extends RecyclerView.Adapter<TopListRecordAdap
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
             super(itemView);
-
             time= (TextView) itemView.findViewById(R.id.textViewTime);
             points= (TextView) itemView.findViewById(R.id.textViewPoints);
         }
+    }
+    public void addItem(TopListRecord item) {
+        toplist.add(item);
+        notifyItemInserted(toplist.size() - 1);
+    }
+
+    public void update(List<TopListRecord> shoppingItems) {
+        toplist.clear();
+        toplist.addAll(shoppingItems);
+        notifyDataSetChanged();
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class FieldTest {
-    Field field;
+    private Field field;
 
     @Before
     public void setUp() throws Exception {

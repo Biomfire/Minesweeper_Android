@@ -1,5 +1,6 @@
 package com.example.minefield.model;
 
+
 public class Coordinate {
     private Integer x, y;
 

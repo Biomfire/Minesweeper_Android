@@ -4,29 +4,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.minefield.R;
-import com.example.minefield.model.TopListRecord;
+import com.example.minefield.database.AppDataBase;
+import com.example.minefield.database.TopListRecord;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecordsActivity extends AppCompatActivity {
-    ArrayList<TopListRecord> toplist;
+    private TopListRecordAdapter adapter;
+    private AppDataBase database;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
-        RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvTopList);
+        database= AppDataBase.getDatabase(getApplication());
+        recyclerView = (RecyclerView) findViewById(R.id.rvTopList);
+        adapter = new TopListRecordAdapter();
+        loadItemsInBackground();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
 
-        // Initialize contacts
-        toplist = TopListRecord.createTopList(20);
-        // Create adapter passing in the sample user data
-        TopListRecordAdapter adapter = new TopListRecordAdapter(toplist);
-        // Attach the adapter to the recyclerview to populate items
-        rvContacts.setAdapter(adapter);
-        // Set layout manager to position the items
-        rvContacts.setLayoutManager(new LinearLayoutManager(this));
+    private void loadItemsInBackground() {
+        new AsyncTask<Void, Void, List<TopListRecord>>() {
+
+            @Override
+            protected List<TopListRecord> doInBackground(Void... voids) {
+                return database.topListDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<TopListRecord> topListItems) {
+                adapter.update(topListItems);
+            }
+        }.execute();
     }
 }

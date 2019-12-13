@@ -35,10 +35,10 @@ public class AnnoyingService extends Service {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "MineSweeperAnnoyer";//getString(R.string.channel_name);
-            String description = "It's goal is to annoy every player into playing the game.";//getString(R.string.channel_description);
+            CharSequence name = getResources().getString(R.string.notification_channel_name);;//getString(R.string.channel_name);
+            String description = getResources().getString(R.string.notification_channel_description);;//getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("MineSweeperAnnoyer", name, importance);
+            NotificationChannel channel = new NotificationChannel(getResources().getString(R.string.notification_channel_id), name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -62,7 +62,7 @@ public class AnnoyingService extends Service {
     }
 
     private void startService() {
-        this.timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new mainTask(), 5000, 5000);
     }
 
@@ -72,8 +72,8 @@ public class AnnoyingService extends Service {
         mainTask() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx,"MineSweeperAnnoyer")
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("Hi!")
-                    .setContentText("Why are you not playing?")
+                    .setContentTitle(getResources().getString(R.string.notification_title))
+                    .setContentText(getResources().getString(R.string.notification_text))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             notification = builder.build();
         }

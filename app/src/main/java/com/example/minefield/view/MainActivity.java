@@ -10,17 +10,16 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.example.minefield.R;
 
 public class MainActivity extends AppCompatActivity {
-    PopupWindow newGameSettings;
-    View popupView;
+    private PopupWindow newGameSettings;
+    private View popupView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +47,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onRecordButtonClick(View v){
         startActivity(new Intent(this, RecordsActivity.class));
-
-
+    }
+    public void onShopButtonClick(View v){
+        startActivity(new Intent(this, ShopActivity.class));
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -68,13 +68,18 @@ public class MainActivity extends AppCompatActivity {
         SeekBar xSizeSeekBar = popupView.findViewById(R.id.xSizeSeekBar);
         SeekBar ySizeSeekBar = popupView.findViewById(R.id.ySizeSeekBar);
         SeekBar mineNumberSeekBar = popupView.findViewById(R.id.mineNumberSeekBar);
-        Intent newGameIntent = new Intent(this, PlayAcivity.class);
-        newGameIntent.putExtra("loadgame", false);
-        newGameIntent.putExtra("xSize", xSizeSeekBar.getProgress());
-        newGameIntent.putExtra("ySize", ySizeSeekBar.getProgress());
-        newGameIntent.putExtra("mineNumber", mineNumberSeekBar.getProgress());
-        newGameSettings.dismiss();
-        startActivity(newGameIntent);
+        if(xSizeSeekBar.getProgress()+1+ySizeSeekBar.getProgress()+1>=mineNumberSeekBar.getProgress()+1) {
+            Intent newGameIntent = new Intent(this, PlayAcivity.class);
+            newGameIntent.putExtra("loadgame", false);
+            newGameIntent.putExtra("xSize", xSizeSeekBar.getProgress()+1);
+            newGameIntent.putExtra("ySize", ySizeSeekBar.getProgress()+1);
+            newGameIntent.putExtra("mineNumber", mineNumberSeekBar.getProgress()+1);
+            newGameSettings.dismiss();
+            startActivity(newGameIntent);
+        }
+        else{
+            Toast.makeText(this, getResources().getString(R.string.new_game_popup_not_valid_input_toast), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

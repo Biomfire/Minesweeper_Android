@@ -18,12 +18,12 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.example.minefield.R;
-import com.example.minefield.controller.FieldController;
+import com.example.minefield.presenter.FieldPresenter;
 
 
 public class MinefieldView extends View {
     private static final String TAG = MinefieldView.class.getName();
-    FieldController field;
+    private FieldPresenter field;
     private float fieldCenterPointX = 0;
     private float fieldCenterPointY = 0;
     Paint paint = new Paint();
@@ -131,7 +131,7 @@ public class MinefieldView extends View {
         canvas.restore();
     }
 
-    public void setField(FieldController field) {
+    public void setField(FieldPresenter field) {
         this.field = field;
         this.mineFieldSizeX = field.getFieldSizeX();
         this.mineFieldSizeY = field.getFieldSizeY();
@@ -141,7 +141,7 @@ public class MinefieldView extends View {
     }
 
     void drawField(int x, int y, Canvas canvas) {
-        FieldController.FieldDrawType type = field.getField(x, y);
+        FieldPresenter.FieldDrawType type = field.getField(x, y);
         Rect destinationRectangle = new Rect(x * fieldSizeX, y * fieldSizeY, (x + 1) * fieldSizeX, (y + 1) * fieldSizeY);
         switch (type) {
             case MINE:
